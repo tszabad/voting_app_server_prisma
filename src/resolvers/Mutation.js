@@ -4,10 +4,18 @@ const { APP_SECRET, getUserId } = require('../utils')
 
 function post(parent, args, context, info) {
   const userId = getUserId(context)
-  return context.prisma.createLink({
-    url: args.url,
+  return context.prisma.createPost({
     description: args.description,
     postedBy: { connect: { id: userId } },
+  })
+}
+
+function option(parent, args, context, info) {
+  
+  return context.prisma.createOption({
+    answer: args.answer,
+    postOption: { connect: { id: post.id } },
+ 
   })
 }
 
@@ -44,17 +52,17 @@ async function login(parent, args, context, info) {
 
 async function vote(parent, args, context, info) {
   const userId = getUserId(context)
-  const linkExists = await context.prisma.$exists.vote({
+  const optionExists = await context.prisma.$exists.vote({
     user: { id: userId },
-    link: { id: args.linkId },
+    option: { id: args.optionId },
   })
-  if (linkExists) {
-    throw new Error(`Already voted for link: ${args.linkId}`)
+  if (optionExists) {
+    throw new Error(`Already voted for Option: ${args.optionId}`)
   }
 
   return context.prisma.createVote({
     user: { connect: { id: userId } },
-    link: { connect: { id: args.linkId } },
+    option: { connect: { id: args.optionId } },
   })
 }
 
@@ -62,5 +70,6 @@ module.exports = {
   post,
   signup,
   login,
+  option,
   vote,
 }

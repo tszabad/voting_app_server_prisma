@@ -1,10 +1,10 @@
-type Link {
+type Post {
   id: ID! @id
   createdAt: DateTime! @createdAt
   description: String!
-  url: String!
   postedBy: User
-  votes: [Vote!]!
+  options: [Option!]!
+  
 }
 
 type User {
@@ -12,13 +12,17 @@ type User {
   name: String!
   email: String! @unique
   password: String!
-  links: [Link!]!
+  posts: [Post!]!
   votes: [Vote!]!
 }
-
+ type Option {
+   id: ID! @id
+  answer: String!
+  votes: [Vote!]!
+ }
 
 type Vote {
   id: ID! @id
-  link: Link!
+  option: Option!
   user: User!
 }

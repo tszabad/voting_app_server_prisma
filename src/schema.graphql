@@ -13,19 +13,20 @@ enum LinkOrderByInput {
 }
 
 type Feed {
-  links: [Link!]!
+  posts: [Post!]!
   count: Int!
 }
 
 type Mutation {
-  post(url: String!, description: String!): Link!
+  post( description: String!): Post!
+  option(answer: String!): Option!
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
-  vote(linkId: ID!): Vote
+  vote(postId: ID!): Vote
 }
 
 type Subscription {
-  newLink: Link
+  newPost: Post
   newVote: Vote
 }
 
@@ -38,19 +39,25 @@ type User {
   id: ID!
   name: String!
   email: String!
-  links: [Link!]!
+  posts: [Post!]!
 }
 
-type Link {
+type Post {
   id: ID!
   description: String!
-  url: String!
   postedBy: User
-  votes: [Vote!]!
+  options: [Option!]!
 }
+type Option {
+   id: ID! 
+  answer: String!
+  votedBy: User
+  postOption: Post
+  votes: [Vote!]!
+ }
 
 type Vote {
   id: ID!
-  link: Link!
+  option: Option!
   user: User!
 }
