@@ -66,6 +66,7 @@ interface Node {
 type Option {
   id: ID!
   answer: String!
+  post: Post!
   votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
@@ -78,11 +79,12 @@ type OptionConnection {
 input OptionCreateInput {
   id: ID
   answer: String!
+  post: PostCreateOneWithoutOptionsInput!
   votes: VoteCreateManyWithoutOptionInput
 }
 
-input OptionCreateManyInput {
-  create: [OptionCreateInput!]
+input OptionCreateManyWithoutPostInput {
+  create: [OptionCreateWithoutPostInput!]
   connect: [OptionWhereUniqueInput!]
 }
 
@@ -91,9 +93,16 @@ input OptionCreateOneWithoutVotesInput {
   connect: OptionWhereUniqueInput
 }
 
+input OptionCreateWithoutPostInput {
+  id: ID
+  answer: String!
+  votes: VoteCreateManyWithoutOptionInput
+}
+
 input OptionCreateWithoutVotesInput {
   id: ID
   answer: String!
+  post: PostCreateOneWithoutOptionsInput!
 }
 
 type OptionEdge {
@@ -165,13 +174,9 @@ input OptionSubscriptionWhereInput {
   NOT: [OptionSubscriptionWhereInput!]
 }
 
-input OptionUpdateDataInput {
-  answer: String
-  votes: VoteUpdateManyWithoutOptionInput
-}
-
 input OptionUpdateInput {
   answer: String
+  post: PostUpdateOneRequiredWithoutOptionsInput
   votes: VoteUpdateManyWithoutOptionInput
 }
 
@@ -179,20 +184,20 @@ input OptionUpdateManyDataInput {
   answer: String
 }
 
-input OptionUpdateManyInput {
-  create: [OptionCreateInput!]
-  update: [OptionUpdateWithWhereUniqueNestedInput!]
-  upsert: [OptionUpsertWithWhereUniqueNestedInput!]
+input OptionUpdateManyMutationInput {
+  answer: String
+}
+
+input OptionUpdateManyWithoutPostInput {
+  create: [OptionCreateWithoutPostInput!]
   delete: [OptionWhereUniqueInput!]
   connect: [OptionWhereUniqueInput!]
   set: [OptionWhereUniqueInput!]
   disconnect: [OptionWhereUniqueInput!]
+  update: [OptionUpdateWithWhereUniqueWithoutPostInput!]
+  upsert: [OptionUpsertWithWhereUniqueWithoutPostInput!]
   deleteMany: [OptionScalarWhereInput!]
   updateMany: [OptionUpdateManyWithWhereNestedInput!]
-}
-
-input OptionUpdateManyMutationInput {
-  answer: String
 }
 
 input OptionUpdateManyWithWhereNestedInput {
@@ -207,13 +212,19 @@ input OptionUpdateOneRequiredWithoutVotesInput {
   connect: OptionWhereUniqueInput
 }
 
-input OptionUpdateWithoutVotesDataInput {
+input OptionUpdateWithoutPostDataInput {
   answer: String
+  votes: VoteUpdateManyWithoutOptionInput
 }
 
-input OptionUpdateWithWhereUniqueNestedInput {
+input OptionUpdateWithoutVotesDataInput {
+  answer: String
+  post: PostUpdateOneRequiredWithoutOptionsInput
+}
+
+input OptionUpdateWithWhereUniqueWithoutPostInput {
   where: OptionWhereUniqueInput!
-  data: OptionUpdateDataInput!
+  data: OptionUpdateWithoutPostDataInput!
 }
 
 input OptionUpsertWithoutVotesInput {
@@ -221,10 +232,10 @@ input OptionUpsertWithoutVotesInput {
   create: OptionCreateWithoutVotesInput!
 }
 
-input OptionUpsertWithWhereUniqueNestedInput {
+input OptionUpsertWithWhereUniqueWithoutPostInput {
   where: OptionWhereUniqueInput!
-  update: OptionUpdateDataInput!
-  create: OptionCreateInput!
+  update: OptionUpdateWithoutPostDataInput!
+  create: OptionCreateWithoutPostInput!
 }
 
 input OptionWhereInput {
@@ -256,6 +267,7 @@ input OptionWhereInput {
   answer_not_starts_with: String
   answer_ends_with: String
   answer_not_ends_with: String
+  post: PostWhereInput
   votes_every: VoteWhereInput
   votes_some: VoteWhereInput
   votes_none: VoteWhereInput
@@ -293,7 +305,7 @@ input PostCreateInput {
   id: ID
   description: String!
   postedBy: UserCreateOneWithoutPostsInput
-  options: OptionCreateManyInput
+  options: OptionCreateManyWithoutPostInput
 }
 
 input PostCreateManyWithoutPostedByInput {
@@ -301,10 +313,21 @@ input PostCreateManyWithoutPostedByInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PostCreateOneWithoutOptionsInput {
+  create: PostCreateWithoutOptionsInput
+  connect: PostWhereUniqueInput
+}
+
+input PostCreateWithoutOptionsInput {
+  id: ID
+  description: String!
+  postedBy: UserCreateOneWithoutPostsInput
+}
+
 input PostCreateWithoutPostedByInput {
   id: ID
   description: String!
-  options: OptionCreateManyInput
+  options: OptionCreateManyWithoutPostInput
 }
 
 type PostEdge {
@@ -390,7 +413,7 @@ input PostSubscriptionWhereInput {
 input PostUpdateInput {
   description: String
   postedBy: UserUpdateOneWithoutPostsInput
-  options: OptionUpdateManyInput
+  options: OptionUpdateManyWithoutPostInput
 }
 
 input PostUpdateManyDataInput {
@@ -418,14 +441,31 @@ input PostUpdateManyWithWhereNestedInput {
   data: PostUpdateManyDataInput!
 }
 
+input PostUpdateOneRequiredWithoutOptionsInput {
+  create: PostCreateWithoutOptionsInput
+  update: PostUpdateWithoutOptionsDataInput
+  upsert: PostUpsertWithoutOptionsInput
+  connect: PostWhereUniqueInput
+}
+
+input PostUpdateWithoutOptionsDataInput {
+  description: String
+  postedBy: UserUpdateOneWithoutPostsInput
+}
+
 input PostUpdateWithoutPostedByDataInput {
   description: String
-  options: OptionUpdateManyInput
+  options: OptionUpdateManyWithoutPostInput
 }
 
 input PostUpdateWithWhereUniqueWithoutPostedByInput {
   where: PostWhereUniqueInput!
   data: PostUpdateWithoutPostedByDataInput!
+}
+
+input PostUpsertWithoutOptionsInput {
+  update: PostUpdateWithoutOptionsDataInput!
+  create: PostCreateWithoutOptionsInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutPostedByInput {

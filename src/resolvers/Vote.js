@@ -1,5 +1,5 @@
 function option(parent, args, context) {
-    return context.prisma.vote({ id: parent.id }).link()
+    return context.prisma.vote({ id: parent.id }).options()
   }
   
   function user(parent, args, context) {

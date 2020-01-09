@@ -5,13 +5,12 @@ function votedBy(parent, args, context) {
   function votes(parent, args, context) {
     return context.prisma.option({ id: parent.id }).votes()
   }
-
-  function postOption(parent, args, context) {
-    return context.prisma.option({ id: parent.id }).postOption()
-  }
+  
+  
   
   module.exports = {
     votedBy,
     votes,
-    postOption,
+ 
+    
   }

@@ -18,6 +18,7 @@ type User {
  type Option {
    id: ID! @id
   answer: String!
+  post:Post!
   votes: [Vote!]!
  }
 

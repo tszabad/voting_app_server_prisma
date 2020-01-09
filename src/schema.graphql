@@ -49,10 +49,9 @@ type Post {
   options: [Option!]!
 }
 type Option {
-   id: ID! 
+  id: ID! 
   answer: String!
   votedBy: User
-  postOption: Post
   votes: [Vote!]!
  }
 

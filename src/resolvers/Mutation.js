@@ -14,7 +14,7 @@ function option(parent, args, context, info) {
   
   return context.prisma.createOption({
     answer: args.answer,
-    postOption: { connect: { id: post.id } },
+    post: { connect: { id: post.id } },
  
   })
 }
